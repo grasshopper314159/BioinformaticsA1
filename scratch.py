@@ -24,13 +24,24 @@ import numpy
 #       print (genome[start : start+length])
 #==============================================================================
 
+# =============================================================================
+# def myconcat(frags):
+#     s=""
+#     file = open(frags, 'r')
+#     for line in file.readlines():
+#         s = s+line.strip()
+#     file.close()
+#     return s
+# =============================================================================
+
 def myconcat(frags):
     s=""
-    file = open(frags, 'r')
-    for line in file.readlines():
-        s = s+line.strip()
-    file.close()
+    #file = open(frags, 'r')
+    for str in frags:
+        s = s+str.strip()
+    #file.close()
     return s
+
 
 def fileToList(frags):
     s=""
@@ -73,11 +84,13 @@ if __name__=='__main__':
     f = sys.argv[1]
     s2=myconcat(sys.argv[1])
     print(s2)
-    kmers('KIHOIHOI',3)
-    print(multipleOfK(3,3))
-    print(multipleOfK(4,3))
-    print(multipleOfK(5,3))
-    mers=kmers(s2,5)
-    mers.sort()
+    mers = kmers('GGGATGCGATGTT',3)
+# =============================================================================
+#     print(multipleOfK(3,3))
+#     print(multipleOfK(4,3))
+#     print(multipleOfK(5,3))
+#     mers=kmers(s2,3)
+#     mers.sort()
+# =============================================================================
     print (mers)
-    print(fileToList(f))
+    print(myconcat(mers))

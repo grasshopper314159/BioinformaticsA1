@@ -1,15 +1,9 @@
-# -*- coding: utf-8 -*-
-"""
-Spyder Editor
-
-This is a temporary script file.
-"""
 
 import sys
 import numpy
 
 def main(argv):
-  path = "natesAssembly.txt"
+    path = "natesAssembly.txt"
   if len(argv) != 4:
     print ('usage: <genome> <number_of_reads> <min_read_length> max_read_length>')
     print()
@@ -17,12 +11,12 @@ def main(argv):
     genome, reads, min_read_length, max_read_length = argv
     reads, min_read_length, max_read_length = [ int(x) for x in (reads, min_read_length, max_read_length) ]
     n = len(genome)
-  with open(path,'w') as f:
-    for i in range(reads):
-      start = numpy.random.randint(n - min_read_length)
-      length = numpy.random.randint(min_read_length, max_read_length+1)
-      f.write(genome[start : start+length]+'\n')
-      #print (genome[start : start+length])
+    with (path, r+) as f:
+        for i in range(reads):
+          start = numpy.random.randint(n - min_read_length)
+          length = numpy.random.randint(min_read_length, max_read_length+1)
+          f.write(genome[start : start+length]+,'\n')
+          #print (genome[start : start+length])
       
 
 if __name__=='__main__':
