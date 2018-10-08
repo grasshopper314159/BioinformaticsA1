@@ -1,0 +1,4 @@
+rememmber we can use NW for longetst substring matching, or sumething like that, just set gap score to - inf and mismatch to -inf
+
+re pipeline
+make_f is a function

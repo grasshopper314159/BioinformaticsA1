@@ -4,11 +4,13 @@ Created on Sat Oct  6 23:26:10 2018
 
 @author: njayj
 """
+import numpy, sys
 import copy
 import string
 import random
 from itertools import product
 from collections import defaultdict
+#from make_fragments3.py import make_f
 
 import numpy as np
 
@@ -20,6 +22,33 @@ genome = "".join(random.choice("AGCT") for _ in range(1000))
 def loadFrags(f):
       with open(f) as input1:
           return input1.read().strip()
+      
+def make_f(path_to_genome_excerpt,reads,min_read_length,max_read_length):
+  write_path = "natesFrags.txt"
+
+# =============================================================================
+#   if len(argv) != 4:
+#     print ('usage: <genome> <number_of_reads> <min_read_length> max_read_length>')
+#     print()
+# =============================================================================
+  try:
+    with open(path_to_genome_excerpt,'r') as f:
+      genome = f.read()
+    reads, min_read_length, max_read_length = [ int(x) for x in (reads, min_read_length, max_read_length) ]
+    n = len(genome)
+  except:
+    print('Error opening genome file')
+  l=[]  
+  with open(write_path,'w') as f:
+    for i in range(reads):
+      start = numpy.random.randint(n - min_read_length)
+      length = numpy.random.randint(min_read_length, max_read_length+1)
+      l.append((genome[start : start+length]+'\n'))
+      #print (genome[start : start+length])
+  print('Length of genome is: ',n)
+  print('Reads: ',reads)
+  return l
+
 
 def perfect_reads(genome, n_reads=10):
     """Create perfect reads from `genome`"""
@@ -29,20 +58,23 @@ def perfect_reads(genome, n_reads=10):
         low = starts[n]
         yield genome[low:low + length[n]]
         
-def kmers(read, k=10):
+def kmers(read, k=3):
     """Generate `k`-mers from a `read`"""
-    for n in range(len(read) - k + 1):
+    for n in range(len(read) - k):
+        #chops off last len(nucls) % k nucls
         yield read[n:n+k]
         
-def get_perfect_kmers(genome):
+def get_perfect_kmers(genome, reads, min_read_length, max_read_length):
     kmers_ = []
-    for read in perfect_reads(genome, n_reads=1000):
+    reads, min_read_length, max_read_length = [ int(x) for x in (reads, min_read_length, max_read_length) ]
+    frags = make_f(genome, reads, min_read_length, max_read_length)
+    for read in frags:
         for kmer in kmers(read):
             kmers_.append(kmer)
             
     return kmers_
 
-
+#make_f(path_to_genome_excerpt,reads,min_read_length,max_read_length):
 # =============================================================================
 # def get_perfect_kmers(frags):
 #     kmers_ = []
@@ -52,9 +84,9 @@ def get_perfect_kmers(genome):
 #     return kmers_
 # =============================================================================
 
-kmers_ = get_perfect_kmers(genome)
+#kmers_ = get_perfect_kmers(genome)
 # lots of kmers, but not that many are unique
-print(len(kmers_), len(set(kmers_)))
+#print(len(kmers_), len(set(kmers_)))
 
 # =============================================================================
 # from graphviz import Digraph
@@ -168,7 +200,16 @@ def _tour(start_node, graph, end=None):
             offset += len(t)
             
     return tour
-
+#%%
 if __name__=='__main__':
-    check_tour(nodes2)
+    genome, reads, min_read_length, max_read_length = sys.argv[1:]
+    #make_f(sys.argv[1:],300,20,50)
+    kmers_ = get_perfect_kmers(genome, reads, min_read_length, max_read_length)
+    # lots of kmers, but not that many are unique
+    print(len(kmers_), len(set(kmers_)))
+    nodes3=make_graph(kmers_)
+    for node in nodes3:
+        start=node
+        break
+    print(check_tour(start,nodes3))
     
